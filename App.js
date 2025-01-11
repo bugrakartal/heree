@@ -1,11 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import useLocation from './useLocation'; // Hook'tan konum bilgisini al
 
 export default function App() {
+  const { location, errorMsg, permissionGranted } = useLocation(); // Hook'u kullanarak konumu al
+
+  if (errorMsg) {
+    return (
+      <View style={styles.container}>
+        <Text>{errorMsg}</Text>
+      </View>
+    );
+  }
+
+  if (!permissionGranted) {
+    return (
+      <View style={styles.container}>
+        <Text>Requesting permission for location...</Text>
+      </View>
+    );
+  }
+
+  // Konum alındığında harita gösterimi
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {location ? (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          {/* Pinin rengini burada değiştirebilirsiniz */}
+          <Marker 
+            coordinate={location} 
+            pinColor="blue" // Pin rengini mavi yapmak için
+          />
+        </MapView>
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </View>
   );
 }
@@ -13,8 +51,11 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   },
 });
