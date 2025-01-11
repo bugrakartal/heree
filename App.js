@@ -44,6 +44,17 @@ export default function App() {
       ) : (
         <Text>Loading...</Text>
       )}
+      {/* Animasyonlu örnek bileşen */}
+      <AnimatedStyleExample />
+    </View>
+  );
+}
+
+// Animasyonlu Bileşen
+function AnimatedStyleExample() {
+  return (
+    <View style={styles.animatedContainer}>
+      <Text>Hello world!</Text>
     </View>
   );
 }
@@ -57,5 +68,12 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  animatedContainer: {
+    position: 'absolute',
+    bottom: 50,
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 10,
   },
 });
